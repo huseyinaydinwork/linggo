@@ -1,0 +1,40 @@
+# Fly.io — Linggo (https://linggo.fly.dev)
+# Tek makine + kalıcı disk: SQLite veritabanı /app/data altında yaşar, yeniden dağıtımda korunur.
+app = 'linggo'
+primary_region = 'fra'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[env]
+  NODE_ENV = 'production'
+  PORT = '5173'
+  HOST = '0.0.0.0'
+  APP_URL = 'https://linggo.fly.dev'
+  DB_PATH = 'data/pratilange.db'
+  TRUST_PROXY = '1'
+  COOKIE_SECURE = '1'
+  # GEÇİCİ: SMTP ayarlanana kadar doğrulama kodu ekranda gösterilir. SMTP eklenince '0' yap ve yeniden dağıt.
+  EXPOSE_DEV_CODES = '1'
+
+[[mounts]]
+  source = 'linggo_data'
+  destination = '/app/data'
+
+[http_service]
+  internal_port = 5173
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    interval = '30s'
+    timeout = '5s'
+    grace_period = '10s'
+    method = 'GET'
+    path = '/healthz'
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '512mb'

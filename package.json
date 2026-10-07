@@ -1,0 +1,19 @@
+{
+  "name": "pratilange",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pratilange — bilimsel yöntemlerle İngilizce öğrenme platformu",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
+    "make-admin": "node --disable-warning=ExperimentalWarning server/cli.js make-admin",
+    "grant": "node --disable-warning=ExperimentalWarning server/cli.js grant"
+  },
+  "dependencies": {
+    "nodemailer": "^10.0.10"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "pratilange",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--disable-warning=ExperimentalWarning", "server/index.js"],
+      "port": 5173,
+      "autoPort": true
+    },
+    {
+      "name": "pratilange-test",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--disable-warning=ExperimentalWarning", "-e", "process.env.PORT='5174';import('./server/index.js')"],
+      "port": 5174
+    }
+  ]
+}

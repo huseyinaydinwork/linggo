@@ -1,0 +1,7 @@
+# Depoda her zaman LF satır sonu (Docker / Linux sunucu için)
+* text=auto eol=lf
+*.svg text eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.woff2 binary

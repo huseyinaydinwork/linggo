@@ -1,0 +1,13 @@
+node_modules/
+data/
+.env
+*.log
+.DS_Store
+
+# Claude Code kişisel izinleri
+.claude/settings.local.json
+# geçici dosyalar
+_*.mjs
+*.db
+*.db-wal
+*.db-shm
