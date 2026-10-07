@@ -19,7 +19,9 @@ const findUser = email => q.get('SELECT * FROM users WHERE email = ?', normEmail
 const dev = code => (config.exposeDevCodes ? { devCode: code } : {});
 
 function login(res, req, user) {
-  if (config.adminEmails.includes(user.email.toLowerCase()) && user.role !== 'admin') {
+  // auto-admin needs a real mailbox check: while codes are shown on screen anyone could "verify" an unregistered admin address
+  const codesOnScreen = config.isProd && config.exposeDevCodes;
+  if (!codesOnScreen && config.adminEmails.includes(user.email.toLowerCase()) && user.role !== 'admin') {
     q.run("UPDATE users SET role = 'admin' WHERE id = ?", user.id); user.role = 'admin';
   }
   const token = createSession(user.id, req.headers['user-agent']);
@@ -36,7 +38,8 @@ async function sendCode(user, purpose) {
   if (r.error) return r;
   try { await sendMail(user.email, purpose, user.name, r.code); }
   catch (e) { console.error('Mail error:', e.message); fail(502, 'E-posta gönderilemedi. Lütfen biraz sonra tekrar dene.'); }
-  return { sent: true, ...dev(r.code) };
+  // in production only sign-up codes may be shown on screen (temporary no-SMTP launch); a reset code on screen would let anyone take over any account
+  return { sent: true, ...(purpose === 'verify' || !config.isProd ? dev(r.code) : {}) };
 }
 
 export const routes = [
